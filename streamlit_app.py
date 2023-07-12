@@ -1,9 +1,6 @@
-from collections import namedtuple
-import altair as alt
-import math
 import pandas as pd
 import streamlit as st
-
+from snowflake.snowpark import Session
 """
 # Welcome to Streamlit!
 
@@ -14,8 +11,14 @@ forums](https://discuss.streamlit.io).
 
 In the meantime, below is an example of what you can do with just a few lines of code:
 """
+@st.cache_resource
+def create_session():
+    return Session.builder.configs(st.secrets.snowflake).create()
 
+session = create_session()
+st.success("Connected to Snowflake!")
 
+st.stop()
 with st.echo(code_location='below'):
     total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
     num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
